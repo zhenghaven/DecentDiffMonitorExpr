@@ -1,0 +1,4 @@
+[submodule "libs/GethDBReader"]
+	path = libs/GethDBReader
+	url = https://github.com/zhenghaven/GethDBReader.git
+	branch = main
