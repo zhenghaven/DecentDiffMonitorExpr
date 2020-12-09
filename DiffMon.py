@@ -45,6 +45,11 @@ class DiffMon:
 		# Number of checkpoints we have tested
 		self.chkptCount = 0
 
+		# Number of shutdown we found
+		self.shutdownCount = 0
+		self.btShutdownCount = 0
+		self.dfShutdownCount = 0
+
 	def RestartApproach1(self):
 		"""
 		Restart Approach 1: Extend the previous checkpoint window, and get the
@@ -101,6 +106,7 @@ class DiffMon:
 		# Check block time
 		if self.waitTimeEnable and blockTime > self.maxWaitTime:
 			btShutdown = True
+			self.btShutdownCount += 1
 
 		# Check Diff Drop
 		diffDelta = (diffVal - self.diffRef) / float(self.diffRef)
@@ -108,6 +114,7 @@ class DiffMon:
 			absDiffDelta = -diffDelta
 			if absDiffDelta > self.maxDiffDrop:
 				dfShutdown = True
+				self.dfShutdownCount += 1
 
 		# Add new diff value to next checkpoint window
 		self.candChkDiff.append(diffVal)
@@ -118,6 +125,7 @@ class DiffMon:
 			# there was a shutdown
 			# return [Diff_Ref, Diff_Drop, btShutdown, dfShutdown]
 			res = [self.diffRef, diffDelta * 100.0, btShutdown, dfShutdown]
+			self.shutdownCount += 1
 
 		# Should we switch to the next checkpoint window?
 		if len(self.candChkDiff) == self.chkptSize:

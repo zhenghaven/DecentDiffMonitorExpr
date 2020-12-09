@@ -52,6 +52,7 @@ class DiffMonTest:
 			maxwait=maxWaitTime,
 			wait=waitTimeEnable,
 			rs=restartAppr)
+		self.testName = self.outFileName
 
 		self.outFile = open(os.path.join(outputDir, self.outFileName), 'w')
 		self.outFile.write('\"Block_Number\",\"Block_Time\",\"Timestamp\",\"Diff_Ref\",\"Diff_Drop\",\"BTime_Shutdown\",\"Diff_Shutdown\"\n')
@@ -110,9 +111,13 @@ class DiffMonTest:
 
 			# Finished processing all blocks
 			# output summary
+			self.outFile.write('\"#####TABLE_ENDS#####\"\n\n')
+			self.outFile.write('\"Num of Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.diffMon.shutdownCount))
+			self.outFile.write('\"Max Diff. Drop : {maxDiffDrop}\"\n'.format(maxDiffDrop=self.maxDiffDrop))
+			self.outFile.write('\"Num of Chkpts  : {chkptCount}\"\n'.format(chkptCount=self.diffMon.chkptCount))
 			self.outFile.write('\n')
-			self.outFile.write('\"Max Diff. Drop: {maxDiffDrop}\"\n'.format(maxDiffDrop=self.maxDiffDrop))
-			self.outFile.write('\"Num of Chkpts : {chkptCount}\"\n'.format(chkptCount=self.diffMon.chkptCount))
+			self.outFile.write('\"Num of BlockTime  Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.diffMon.btShutdownCount))
+			self.outFile.write('\"Num of Difficulty Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.diffMon.dfShutdownCount))
 
 		except:
 			self.currentStep = self.totalSteps

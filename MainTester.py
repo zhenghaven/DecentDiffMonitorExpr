@@ -9,11 +9,12 @@ import progressbar # python3 -m pip install progressbar2
 
 import ProgBarConfig
 import DiffMonTest
+import BlockTimeTest
 
 # Basic configurations
 MAX_NUM_OF_THREADS  = 4
 INPUT_CSV_FILE_PATH = os.path.join(os.path.abspath('..'), 'DiffSummary.csv')
-OUTPUT_DIR_PATH     = os.path.abspath('.')
+OUTPUT_DIR_PATH     = os.path.join(os.path.abspath('.'), 'results')
 
 # Global variables
 print('INFO:', 'Loading CSV file...')
@@ -22,16 +23,23 @@ print('INFO:', 'Done.')
 
 # Tests configurations
 TEST_LIST = [
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 1000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 2000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 3000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 4000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 5000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 6000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 7000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 8000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 9000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  1000, 20, 900, True, 1),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   100, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   500, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  1000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  2000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  3000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  4000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  5000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  6000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  7000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  8000, 20, 900, True, 2),
+	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  9000, 20, 900, True, 2),
 	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 10000, 20, 900, True, 2),
+	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True, 100, False),
+	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True,  50,  True),
+	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 100, False),
+	# BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 50, True), # too many records
 ]
 
 def Tester(test):
@@ -54,12 +62,19 @@ def main():
 
 		# check status
 		with progressbar.ProgressBar(max_value=totalSteps, **ProgBarConfig.PROGBAR_ARGS) as bar:
+			finishedList = []
 			while currentStep < totalSteps:
 				time.sleep(0.1)
+
+				for test in TEST_LIST:
+					if test.currentStep == test.totalSteps and test not in finishedList:
+						print('\nINFO:', test.testName, 'is done.')
+						finishedList.append(test)
 
 				currentStep = sum([test.currentStep for test in TEST_LIST])
 				bar.update(currentStep)
 
+		# TEST_LIST[0].Begin()
 		print('INFO:', 'Done.')
 
 	return None
