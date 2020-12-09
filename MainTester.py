@@ -13,7 +13,7 @@ import BlockTimeTest
 
 # Basic configurations
 MAX_NUM_OF_THREADS  = 4
-INPUT_CSV_FILE_PATH = os.path.join(os.path.abspath('..'), 'DiffSummary.csv')
+INPUT_CSV_FILE_PATH = os.path.join(os.path.abspath('.'), 'DiffSummary.csv')
 OUTPUT_DIR_PATH     = os.path.join(os.path.abspath('.'), 'results')
 
 # Global variables
