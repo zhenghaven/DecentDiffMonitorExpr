@@ -1,5 +1,20 @@
 import statistics
 
+def GetIndexOfClosestVal(l, val):
+	if len(l) == 0:
+		raise ValueError('No values in the given list.')
+
+	res = 0
+	diff = abs(l[0] - val)
+	for i in range(len(l)):
+		newDiff = abs(l[i] - val)
+		if newDiff < diff:
+			res = i
+			diff = newDiff
+
+	return res
+
+
 class DiffMon:
 
 	def __init__(self,
@@ -35,12 +50,17 @@ class DiffMon:
 
 		# A list of difficulty values from previous checkpoint window
 		self.prevChkDiff = []
+		self.prevChkS = 0
+		self.prevChkE = 0
 
 		# A list of difficulty values for the next checkpoint window
 		self.candChkDiff = []
+		self.candChkS = 0
+		self.candChkE = 0
 
 		# median value of previous checkpoint window
 		self.diffRef = None
+		self.diffRefBNum = 0
 
 		# Number of checkpoints we have tested
 		self.chkptCount = 0
@@ -58,7 +78,9 @@ class DiffMon:
 		"""
 
 		self.prevChkDiff = self.prevChkDiff + self.candChkDiff
-		self.diffRef     = statistics.median(self.prevChkDiff)
+		self.diffRef     = int(statistics.median(self.prevChkDiff))
+		self.diffRefBNum = self.prevChkS + GetIndexOfClosestVal(self.prevChkDiff, self.diffRef)
+		self.prevChkE    = self.candChkE
 
 	def RestartApproach2(self):
 		"""
@@ -67,6 +89,7 @@ class DiffMon:
 		"""
 
 		self.diffRef = self.candChkDiff[len(self.candChkDiff) - 1]
+		self.diffRefBNum = self.candChkE
 
 	def Restart(self):
 		"""
@@ -75,18 +98,23 @@ class DiffMon:
 		"""
 		self.restartFunc[self.restartAppr - 1](self)
 
-	def Init(self, diffVal):
+	def Init(self, bNum, diffVal):
 		"""
 		Initialize the difficulty monitor during the time when the first checkpoint
 		window hasn't been filled yet. (Internally used method)
 		"""
 		self.prevChkDiff.append(diffVal)
 
+		if len(self.prevChkDiff) == 0:
+			self.prevChkS = bNum
+
 		if len(self.prevChkDiff) == self.chkptSize:
-			self.diffRef = statistics.median(self.prevChkDiff)
+			self.diffRef = int(statistics.median(self.prevChkDiff))
+			self.diffRefBNum = self.prevChkS + GetIndexOfClosestVal(self.prevChkDiff, self.diffRef)
+			self.prevChkE = bNum
 			self.chkptCount += 1
 
-	def Update(self, diffVal, blockTime):
+	def Update(self, bNum, diffVal, blockTime):
 		"""
 		Give a new block info to difficulty monitor for processing.
 
@@ -97,7 +125,7 @@ class DiffMon:
 		# make sure there are enough difficulty values in previous checkpoint
 		# (This is unique in experiment code)
 		if len(self.prevChkDiff) < self.chkptSize:
-			self.Init(diffVal)
+			self.Init(bNum, diffVal)
 			return None
 
 		btShutdown = False
@@ -118,20 +146,25 @@ class DiffMon:
 
 		# Add new diff value to next checkpoint window
 		self.candChkDiff.append(diffVal)
+		self.candChkE = bNum
 
 		# Prepare return results
 		res = None
 		if btShutdown or dfShutdown:
 			# there was a shutdown
 			# return [Diff_Ref, Diff_Drop, btShutdown, dfShutdown]
-			res = [self.diffRef, diffDelta * 100.0, btShutdown, dfShutdown]
+			res = (self.diffRef, diffDelta * 100.0, btShutdown, dfShutdown, self.prevChkS, self.prevChkE, self.diffRefBNum)
 			self.shutdownCount += 1
 
 		# Should we switch to the next checkpoint window?
 		if len(self.candChkDiff) == self.chkptSize:
 			self.prevChkDiff, self.candChkDiff = self.candChkDiff, self.prevChkDiff
 			self.candChkDiff = []
-			self.diffRef = statistics.median(self.prevChkDiff)
+			self.prevChkS = self.candChkS
+			self.prevChkE = self.candChkE
+			self.candChkS = bNum + 1
+			self.diffRef = int(statistics.median(self.prevChkDiff))
+			self.diffRefBNum = self.prevChkS + GetIndexOfClosestVal(self.prevChkDiff, self.diffRef)
 			self.chkptCount += 1
 
 		# Should we take the special restart routine?

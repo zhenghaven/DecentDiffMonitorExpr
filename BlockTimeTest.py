@@ -176,6 +176,7 @@ class BlockTimeTest:
 						time = rec[2]
 					))
 			self.outFile.write('\"#####TABLE_ENDS#####\"\n\n')
+			self.outFile.flush()
 
 		except:
 			self.currentStep = self.totalSteps

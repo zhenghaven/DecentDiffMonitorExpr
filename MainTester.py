@@ -66,9 +66,12 @@ def main():
 			while currentStep < totalSteps:
 				time.sleep(0.1)
 
+				finishedListLen = len(finishedList)
 				for test in TEST_LIST:
 					if test.currentStep == test.totalSteps and test not in finishedList:
-						print('\nINFO:', test.testName, 'is done.')
+						if finishedListLen == len(finishedList):
+							print()
+						print('INFO:', test.testName, 'is done.')
 						finishedList.append(test)
 
 				currentStep = sum([test.currentStep for test in TEST_LIST])

@@ -55,7 +55,7 @@ class DiffMonTest:
 		self.testName = self.outFileName
 
 		self.outFile = open(os.path.join(outputDir, self.outFileName), 'w')
-		self.outFile.write('\"Block_Number\",\"Block_Time\",\"Timestamp\",\"Diff_Ref\",\"Diff_Drop\",\"BTime_Shutdown\",\"Diff_Shutdown\"\n')
+		self.outFile.write('\"Block_Number\",\"Block_Time\",\"Timestamp\",\"Diff_Ref\",\"Diff_Drop\",\"BTime_Shutdown\",\"Diff_Shutdown\",\"Checkpt_Start\",\"Checkpt_End\",\"Ref_BlockNum\"\n')
 		self.outFile.flush()
 
 		self.totalSteps = len(self.diffDataset.index)
@@ -88,17 +88,20 @@ class DiffMonTest:
 				blockTime = time - prevTime
 
 				# Send to difficulty monitor
-				res = self.diffMon.Update(diff, blockTime)
+				res = self.diffMon.Update(bNum, diff, blockTime)
 				if res is not None:
 					timeReadable = datetime.fromtimestamp(time)
-					self.outFile.write('{bNum},{bTime},\"{time}\",{diffRef},{diffDrop},{btDown},{dfDown}\n'.format(
+					self.outFile.write('{bNum},{bTime},\"{time}\",{diffRef},{diffDrop},{btDown},{dfDown},{chkpt_s},{chkpt_e},{ref_bnum}\n'.format(
 						bNum    = bNum,
 						bTime   = blockTime,
 						time    = str(timeReadable),
 						diffRef = res[0],
 						diffDrop= res[1],
 						btDown  = res[2],
-						dfDown  = res[3]))
+						dfDown  = res[3],
+						chkpt_s = res[4],
+						chkpt_e = res[5],
+						ref_bnum= res[6]))
 
 					if res[1] < self.maxDiffDrop:
 						self.maxDiffDrop = res[1]
@@ -110,14 +113,15 @@ class DiffMonTest:
 				#bar.update(self.currentStep)
 
 			# Finished processing all blocks
-			# output summary
 			self.outFile.write('\"#####TABLE_ENDS#####\"\n\n')
+			# output summary
 			self.outFile.write('\"Num of Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.diffMon.shutdownCount))
 			self.outFile.write('\"Max Diff. Drop : {maxDiffDrop}\"\n'.format(maxDiffDrop=self.maxDiffDrop))
 			self.outFile.write('\"Num of Chkpts  : {chkptCount}\"\n'.format(chkptCount=self.diffMon.chkptCount))
 			self.outFile.write('\n')
 			self.outFile.write('\"Num of BlockTime  Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.diffMon.btShutdownCount))
 			self.outFile.write('\"Num of Difficulty Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.diffMon.dfShutdownCount))
+			self.outFile.flush()
 
 		except:
 			self.currentStep = self.totalSteps
