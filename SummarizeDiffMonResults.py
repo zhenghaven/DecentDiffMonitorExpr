@@ -3,7 +3,7 @@
 import os
 
 RESULT_DIR_PATH = os.path.join(os.path.abspath('.'), 'results')
-SUMMARY_FILENAME = 'chkpt_summary.csv'
+SUMMARY_FILENAME = 'ChkptTestSummary.csv'
 
 FILENAME_LIST = []
 
