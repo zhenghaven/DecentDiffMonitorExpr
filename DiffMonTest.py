@@ -40,6 +40,7 @@ class DiffMonTest:
 
 		self.diffDataset = diffDataset if diffDataset is not None else pandas.read_csv(diffDatasetPath)
 
+		self.chkptSize = chkptSize
 		self.diffMon = DiffMon.DiffMon(chkptSize,
 						maxDiffDrop,
 						maxWaitTime,
@@ -130,6 +131,7 @@ class DiffMonTest:
 			# Finished processing all blocks
 			self.outFile.write('\"#####TABLE_ENDS#####\"\n\n')
 			# output summary
+			self.outFile.write('\"Checkpoint Size: {chkptSize}\"\n'.format(chkptSize=self.chkptSize))
 			self.outFile.write('\"Num of Shutdown: {shutdownCount}\"\n'.format(shutdownCount=self.shutdownCount))
 			self.outFile.write('\"Max Diff. Drop : {maxDiffDrop}\"\n'.format(maxDiffDrop=self.maxDiffDrop))
 			self.outFile.write('\"Num of Chkpts  : {chkptCount}\"\n'.format(chkptCount=self.diffMon.chkptCount))
