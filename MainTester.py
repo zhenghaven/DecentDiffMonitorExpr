@@ -10,6 +10,7 @@ import progressbar # python3 -m pip install progressbar2
 import ProgBarConfig
 import DiffMonTest
 import BlockTimeTest
+import TesseractTest
 
 # Basic configurations
 MAX_NUM_OF_THREADS  = 4
@@ -24,33 +25,30 @@ print('INFO:', 'Done.')
 # Tests configurations
 TEST_LIST = [
 	# DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  1000, 20, 900, True, 1), # take long time, repeatedly restart
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   100, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   500, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  1000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  2000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  3000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  4000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  5000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  6000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  7000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  8000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  9000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 10000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 11000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 12000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 13000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 14000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 15000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 16000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 17000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 18000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 19000, 20, 900, True, 2),
-	DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, 20000, 20, 900, True, 2),
+	# DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   50, 20, 900, True, 2), # Added by the for loop
 	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True, 100, False),
 	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True,  50,  True),
 	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 100, False),
 	# BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 50, True), # too many records
+	TesseractTest.TesseractTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, [
+		(2,    60),
+		(2,   120),
+		(1.5,   0),
+		(1.5, 120),
+		(1.3, 120),
+	]),
 ]
+
+TEST_CHECKPOINT_SIZE_MIN  = 50
+TEST_CHECKPOINT_SIZE_MAX  = 1500
+TEST_CHECKPOINT_SIZE_STEP = 50
+
+for size in range(TEST_CHECKPOINT_SIZE_MIN,
+					TEST_CHECKPOINT_SIZE_MAX + TEST_CHECKPOINT_SIZE_STEP,
+					TEST_CHECKPOINT_SIZE_STEP):
+	TEST_LIST.append(
+		DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, size, 20, 900, True, 2)
+	)
 
 def Tester(test):
 	"""
