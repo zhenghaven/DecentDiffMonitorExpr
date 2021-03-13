@@ -10,6 +10,7 @@ import progressbar # python3 -m pip install progressbar2
 import ProgBarConfig
 import DiffMonTest
 import BlockTimeTest
+import BlockTimeDistTest
 import TesseractTest
 
 # Basic configurations
@@ -24,6 +25,7 @@ print('INFO:', 'Done.')
 
 # Tests configurations
 TEST_LIST = [
+	BlockTimeDistTest.BlockTimeDistTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH),
 	# DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  1000, 20, 900, True, 1), # take long time, repeatedly restart
 	# DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   50, 20, 900, True, 2), # Added by the for loop
 	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True, 100, False),
