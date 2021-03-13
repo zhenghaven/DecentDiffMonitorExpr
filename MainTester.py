@@ -26,19 +26,20 @@ print('INFO:', 'Done.')
 # Tests configurations
 TEST_LIST = [
 	BlockTimeDistTest.BlockTimeDistTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH),
+	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True, 100, False),
+
 	# DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  1000, 20, 900, True, 1), # take long time, repeatedly restart
 	# DiffMonTest.DiffMonTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,   50, 20, 900, True, 2), # Added by the for loop
-	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True, 100, False),
-	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True,  50,  True),
-	BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 100, False),
+	# BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH,  True,  50,  True),
+	# BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 100, False),
 	# BlockTimeTest.BlockTimeTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, False, 50, True), # too many records
-	TesseractTest.TesseractTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, [
-		(2,    60),
-		(2,   120),
-		(1.5,   0),
-		(1.5, 120),
-		(1.3, 120),
-	]),
+	# TesseractTest.TesseractTest(OUTPUT_DIR_PATH, DIFF_DATASET, INPUT_CSV_FILE_PATH, [
+	# 	(2,    60),
+	# 	(2,   120),
+	# 	(1.5,   0),
+	# 	(1.5, 120),
+	# 	(1.3, 120),
+	# ]),
 ]
 
 TEST_CHECKPOINT_SIZE_MIN  = 50
