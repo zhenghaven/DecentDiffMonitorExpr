@@ -52,7 +52,7 @@ that can be plugged into the formula above.
 
 As shown above, we first get the difficulty transition function
 (&theta;<sub>&Delta;%</sub>(T<sub>&Delta;</sub>))
-from Ethereum's DAA \cite{ether2013whitepaper, ether2020consensusgo}.
+from Ethereum's DAA [2, 3].
 This function accepts the block time (T<sub>&Delta;</sub>), and calculates the
 change of difficulty in percentage (&theta;<sub>&Delta;%</sub>).
 We can then obtain the next block's difficulty value (&theta;<sub>N + 1</sub>)
@@ -91,3 +91,7 @@ highest 6 or 7 digits of the difficulty value and assume the rest are zeros.
 ## References
 
 [1] [Tesseract: Real-Time Cryptocurrency Exchange Using Trusted Hardware](https://dl.acm.org/doi/10.1145/3319535.3363221)
+
+[2] [A Next Generation Smart Contract \& Decentralized Application Platform](https://cryptorating.eu/whitepapers/Ethereum/Ethereum_white_paper.pdf)
+
+[3] [go-ethereum/consensus.go - Official Go Implementation of the Ethereum Protocol](https://github.com/ethereum/go-ethereum/blob/4b2ff1457ac28fb2894485194e0e344e84c2bcd7/consensus/ethash/consensus.go)
