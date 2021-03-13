@@ -78,3 +78,42 @@ Experimental code for Decent Difficulty Monitor.
 	- `TEST_LIST`: List of test cases
 - Run the python script, and the result will be generated under `results`
   directory in the current working directory
+
+## Discussion on Forked Chain
+
+A blockchain may fork if miners find multiple blocks having the same predecessor.
+Most blockchain protocols address this by requesting honest miners to
+mine on the longest fork [[1], [2]].
+Because our approach relies on recording arrival times, if a chain
+becomes (even temporarily) forked, we must either monitor each fork
+simultaneously to record block arrival times, or repeat the
+Bootstrap-II and Sync phases if a chain is discovered that is longer
+than the chain (or chains) we are currently monitoring.
+
+Our monitor also supports monitoring multiple forks simultaneously.
+When the chain is forked, the monitor also forks into identical sub-monitors,
+each monitoring their own fork.
+Any sub-monitor that has detected an eclipse attack will terminate,
+and when there are no active sub-monitors, meaning the entire chain is under
+attack, the enclave will shutdown to prevent further attacks.
+
+In case a fork is found that is longer than all monitored forks,
+it is necessary to add this fork to the monitor to start monitoring.
+However, we cannot directly add this fork because its difficulty value has
+not been monitored; we can only consider it if it satisfies two conditions.
+First, the predecessor of the new fork must not be any block before the
+checkpoint, since all blocks before the checkpoint should be finalized and
+any modification made to blocks before the checkpoint is uncommon and suspicious.
+Second, the new fork must be longer than all monitored forks,
+because adding a shorter fork is meaningless since honest miners mine on
+the longest fork.
+Once these conditions are satisfied, the new fork can be added by using
+the same steps as those in Bootstrap-II phase and Sync phase.
+
+## References
+
+- [[1]] [Block Height And Forking - Bitcoin Developer: Developer Guides](https://developer.bitcoin.org/devguide/block_chain.html#block-height-and-forking)
+- [[2]] [A Next Generation Smart Contract \& Decentralized Application Platform](https://cryptorating.eu/whitepapers/Ethereum/Ethereum_white_paper.pdf)
+
+[1]: https://developer.bitcoin.org/devguide/block_chain.html#block-height-and-forking "Block Height And Forking - Bitcoin Developer: Developer Guides"
+[2]: https://cryptorating.eu/whitepapers/Ethereum/Ethereum_white_paper.pdf "A Next Generation Smart Contract \& Decentralized Application Platform"

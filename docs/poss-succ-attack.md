@@ -2,7 +2,7 @@
 
 ## Fundamental Theories
 
-1. "The time between every two consecutive Bitcoin blocks is an exponentially distributed random variable." [1]
+1. "The time between every two consecutive Bitcoin blocks is an exponentially distributed random variable." [[1]]
 
 ## Formulas
 
@@ -21,7 +21,7 @@
 |  CDF(T, &lambda;)  | *Cumulative Distribution Function*                   | N/A          |
 
 The possibility of a miner mining a block within a given time follows
-the exponential distribution[1], where the parameter
+the exponential distribution [[1]], where the parameter
 &lambda; is the inverse of the expected block time.
 
 Thus, as shown in the formula above,
@@ -52,7 +52,7 @@ that can be plugged into the formula above.
 
 As shown above, we first get the difficulty transition function
 (&theta;<sub>&Delta;%</sub>(T<sub>&Delta;</sub>))
-from Ethereum's DAA [2, 3].
+from Ethereum's DAA [[2], [3]].
 This function accepts the block time (T<sub>&Delta;</sub>), and calculates the
 change of difficulty in percentage (&theta;<sub>&Delta;%</sub>).
 We can then obtain the next block's difficulty value (&theta;<sub>N + 1</sub>)
@@ -90,8 +90,10 @@ highest 6 or 7 digits of the difficulty value and assume the rest are zeros.
 
 ## References
 
-[1] [Tesseract: Real-Time Cryptocurrency Exchange Using Trusted Hardware](https://dl.acm.org/doi/10.1145/3319535.3363221)
+- [[1]] [Tesseract: Real-Time Cryptocurrency Exchange Using Trusted Hardware](https://dl.acm.org/doi/10.1145/3319535.3363221)
+- [[2]] [A Next Generation Smart Contract \& Decentralized Application Platform](https://cryptorating.eu/whitepapers/Ethereum/Ethereum_white_paper.pdf)
+- [[3]] [go-ethereum/consensus.go - Official Go Implementation of the Ethereum Protocol](https://github.com/ethereum/go-ethereum/blob/4b2ff1457ac28fb2894485194e0e344e84c2bcd7/consensus/ethash/consensus.go)
 
-[2] [A Next Generation Smart Contract \& Decentralized Application Platform](https://cryptorating.eu/whitepapers/Ethereum/Ethereum_white_paper.pdf)
-
-[3] [go-ethereum/consensus.go - Official Go Implementation of the Ethereum Protocol](https://github.com/ethereum/go-ethereum/blob/4b2ff1457ac28fb2894485194e0e344e84c2bcd7/consensus/ethash/consensus.go)
+[1]: https://dl.acm.org/doi/10.1145/3319535.3363221 "Tesseract: Real-Time Cryptocurrency Exchange Using Trusted Hardware"
+[2]: https://cryptorating.eu/whitepapers/Ethereum/Ethereum_white_paper.pdf "A Next Generation Smart Contract \& Decentralized Application Platform"
+[3]: https://github.com/ethereum/go-ethereum/blob/4b2ff1457ac28fb2894485194e0e344e84c2bcd7/consensus/ethash/consensus.go "go-ethereum/consensus.go - Official Go Implementation of the Ethereum Protocol"
